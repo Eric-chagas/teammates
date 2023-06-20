@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
+// import org.junit.Test;
 import org.testng.annotations.Test;
+
 
 import teammates.test.BaseTestCase;
 
@@ -13,6 +14,112 @@ import teammates.test.BaseTestCase;
  * SUT: {@link FeedbackConstantSumQuestionDetails}.
  */
 public class FeedbackConstantSumQuestionDetailsTest extends BaseTestCase {
+
+    //CT1
+    @Test
+    public void testGetMinMaxPointErrors_MinPointNotNull_GreaterThanMinPoint() {
+        FeedbackConstantSumQuestionDetails constantSumQuestionDetails = new FeedbackConstantSumQuestionDetails();
+        
+        Integer minPoint = 5;
+        
+        List<Integer> answers = Arrays.asList(16);
+        constantSumQuestionDetails.setMinPoint(minPoint);
+
+        List<String> result = constantSumQuestionDetails.getMinMaxPointErrors(answers);
+
+        assertTrue(result.isEmpty());
+    }
+
+    //CT2
+    @Test
+    public void testGetMinMaxPointErrors_MinPointNotNull_LesserThanMinPoint() {
+        FeedbackConstantSumQuestionDetails constantSumQuestionDetails = new FeedbackConstantSumQuestionDetails();
+        
+        String CONST_SUM_ANSWER_BELOW_MIN = "An answer cannot be smaller than the minimum number of points: ";
+        
+        Integer minPoint = 10;
+        
+        List<Integer> answers = Arrays.asList(2);
+        constantSumQuestionDetails.setMinPoint(minPoint);
+
+        List<String> result = constantSumQuestionDetails.getMinMaxPointErrors(answers);
+
+        assertTrue(result.contains(CONST_SUM_ANSWER_BELOW_MIN + minPoint));
+    }
+
+    //CT3
+    @Test
+    public void testGetMinMaxPointErrors_MaxPointNotNull_LesserThanMaxPoint() {
+        FeedbackConstantSumQuestionDetails constantSumQuestionDetails = new FeedbackConstantSumQuestionDetails();
+        
+        Integer maxPoint = 90;
+        
+        List<Integer> answers = Arrays.asList(54);
+        constantSumQuestionDetails.setMaxPoint(maxPoint);
+
+        List<String> result = constantSumQuestionDetails.getMinMaxPointErrors(answers);
+
+        assertTrue(result.isEmpty());
+    }
+
+    //CT4
+    @Test
+    public void testGetMinMaxPointErrors_MaxPointNotNull_GreaterThanMaxPoint() {
+        FeedbackConstantSumQuestionDetails constantSumQuestionDetails = new FeedbackConstantSumQuestionDetails();
+        
+        String CONST_SUM_ANSWER_ABOVE_MAX = "An answer cannot be greater than the maximum number of points: ";
+        
+        Integer maxPoint = 65;
+        
+        List<Integer> answers = Arrays.asList(100);
+        constantSumQuestionDetails.setMaxPoint(maxPoint);
+
+        List<String> result = constantSumQuestionDetails.getMinMaxPointErrors(answers);
+
+        assertTrue(result.contains(CONST_SUM_ANSWER_ABOVE_MAX + maxPoint));
+    }
+
+    //CT5
+    @Test
+    public void testGetMinMaxPointErrors_MaxPointNotNull_MinPointNotNull_AnswersEmpty() {
+        FeedbackConstantSumQuestionDetails constantSumQuestionDetails = new FeedbackConstantSumQuestionDetails();
+        
+        Integer minPoint = 10;
+        Integer maxPoint = 80;
+        
+        List<Integer> answers = Arrays.asList();
+
+        constantSumQuestionDetails.setMinPoint(minPoint);
+        constantSumQuestionDetails.setMaxPoint(maxPoint);
+
+        List<String> result = constantSumQuestionDetails.getMinMaxPointErrors(answers);
+
+        assertTrue(result.isEmpty());
+    }
+
+    //CT6
+    @Test
+    public void testGetMinMaxPointErrors_MinPointNull() {
+        FeedbackConstantSumQuestionDetails constantSumQuestionDetails = new FeedbackConstantSumQuestionDetails();
+                
+        List<Integer> answers = Arrays.asList(7);
+        
+        List<String> result = constantSumQuestionDetails.getMinMaxPointErrors(answers);
+
+        assertTrue(result.isEmpty());
+    }
+
+    //CT7
+    @Test
+    public void testGetMinMaxPointErrors_MaxPointNull() {
+        FeedbackConstantSumQuestionDetails constantSumQuestionDetails = new FeedbackConstantSumQuestionDetails();
+        
+        List<Integer> answers = Arrays.asList(32);
+        
+        List<String> result = constantSumQuestionDetails.getMinMaxPointErrors(answers);
+
+        assertTrue(result.isEmpty());
+    }
 
     @Test
     public void testValidateResponseDetails_amongRecipientsValidAnswer_shouldReturnEmptyErrorList() {
